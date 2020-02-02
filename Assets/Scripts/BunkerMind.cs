@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BunkerMind : MonoBehaviour
 {
-
+    public int hp = 100;
+    public int maxhp = 100;
     GameObject[] spawnPoints;
     int index;
     GameObject currentPoint;
@@ -14,6 +17,8 @@ public class BunkerMind : MonoBehaviour
     public int attackHigh = 4;
     public float speedAttack = 0.5f;
     public bool canAttack = true;
+    public Slider slider;
+    public Sprite[] spritesBunker;
     // Start is called before the first frame update
     IEnumerator Start()
     {
@@ -26,6 +31,12 @@ public class BunkerMind : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+        if (hp < 1)
+        {
+            Debug.Log("Game Over");
+            //SceneManager.LoadScene("GameOver");
+        }
         spawnPoints = GameObject.FindGameObjectsWithTag("Enemy");  
     }
 
@@ -45,7 +56,8 @@ public class BunkerMind : MonoBehaviour
             SelectEnemy();
             if(currentPoint != null){
                 Debug.Log("Attack " + currentPoint.GetComponent<AlienMind>().hp);
-                currentPoint.GetComponent<AlienMind>().hp -= Random.Range(attackLow, attackHigh);
+                currentPoint.GetComponent<AlienMind>().Hit(Random.Range(attackLow, attackHigh));
+
             }        
         }
     }
@@ -69,6 +81,46 @@ public class BunkerMind : MonoBehaviour
         Debug.Log("Index: " + minIndex);
         Debug.Log("Lenght: " + spawnPoints.Length);    
         currentPoint = spawnPoints[minIndex];                        
+    }
+
+    public void Hit(int attack)
+    {
+        hp -= attack;
+        Destruction();
+        slider.value = (hp * 100/ maxhp); 
+    }
+
+    public void Destruction()
+    {
+        if (maxhp >= hp && hp >= 0.84 * maxhp)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = spritesBunker[0];
+        }
+
+        if (0.84 * maxhp > hp && hp >= 0.68 * maxhp)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = spritesBunker[1];
+        }
+
+        if (0.68 * maxhp > hp && hp >= 0.52 * maxhp)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = spritesBunker[2];
+        }
+
+        if (0.52 * maxhp > hp && hp >= 0.36 * maxhp)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = spritesBunker[3];
+        }
+
+        if (0.20 * maxhp > hp && hp >= 0.1 * maxhp)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = spritesBunker[4];
+        }
+
+        if (0.1 * maxhp > hp)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = spritesBunker[5];
+        }
     }
 
 }

@@ -43,7 +43,10 @@ public class OverMind : MonoBehaviour
         float x =  Random.Range(-radius, radius);        
         float y =  Mathf.Sign(Random.Range(-1.0f, 1.0f)) * Mathf.Sqrt(radius * radius - (x - transform.position.x) * (x - transform.position.x));
         if (x != 0.0f && y != 0 && countAliens < maxAliens)
+        {
             Instantiate(brick, new Vector3(x, y, 0), Quaternion.identity);
+            countAliens++;
+        }
     }
 
 }

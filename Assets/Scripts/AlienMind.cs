@@ -5,33 +5,59 @@ using UnityEngine;
 public class AlienMind : MonoBehaviour
 {
     public int hp = 7;
+    public int maxhp = 7;
     public GameObject[] target;
     public GameObject currentPoint;
     public GameObject player;
+    public int attackLow = 1;
+    public int attackHigh = 4;
     public float targetDistance=0.1f;
     public float speed=0.001f;
     private bool bunkerNear = false;
     public bool canAttack = true;
+    public float speedAttack = 0.5f;
+    public float awaitingTime = 1.5f;
     public float senseRadius = 4.0f;
+    private float scale = 5.0f;
+    bool doTick = true;
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {        
         player = GameObject.Find("Player");
         target = GameObject.FindGameObjectsWithTag("Bunker");
-        SelectEnemy();
+
+        yield return new WaitForSeconds(awaitingTime);
+
+        // following code
+        StartCoroutine(Ticker(speedAttack));
+    }
+
+    IEnumerator Ticker(float period)
+    {
+        while (doTick)
+        {
+            if (canAttack)
+                Attack();
+            yield return new WaitForSeconds(period);
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(senseRadius > Vector3.Distance(player.transform.position, transform.position))                   
-            currentPoint = player;  
-        else
-            SelectEnemy();
-       
+        
+        
+        SelectEnemy();
 
-        if(!bunkerNear)
+
+        if (!bunkerNear)
+        {
+            canAttack = false;
             Walking();
+        }
+        else
+            canAttack = true;
+
         if(hp <= 0)
         {
             Debug.Log("Destroyed alien");
@@ -44,7 +70,15 @@ public class AlienMind : MonoBehaviour
         Debug.Log("Alien CollisionEnter: Collide");
         if (other.collider.tag == "Bunker")
             bunkerNear = true;
-            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+            //GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+        if (other.collider.tag == "Player")
+            bunkerNear = true;
+        
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        bunkerNear = false;
     }
 
     void Walking()
@@ -54,8 +88,17 @@ public class AlienMind : MonoBehaviour
     }
 
     void SelectEnemy()
-    {   
-        
+    {
+
+        if (senseRadius > Vector3.Distance(player.transform.position, transform.position))
+        {
+            currentPoint = player;
+            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+            return;
+        } else
+        {
+
+        }
         float delta;
         float minDelta = Vector3.Distance(target[0].transform.position, transform.position);
         int minIndex = 0;
@@ -73,11 +116,35 @@ public class AlienMind : MonoBehaviour
         Debug.Log("Alien attack Length: " + target.Length);     
 
         currentPoint = target[minIndex];
+
         
+    }
+
+    public void Hit(int attack)
+    {
+        hp -= attack;
+        Transform gohp = gameObject.transform.Find("hp");
+        gohp.localScale = new Vector3(scale * hp / maxhp, 0.5f, 1.0f);
     }
 
     void Attack()
     {
+       
+        SelectEnemy();
+        if (currentPoint != null)
+        {
+            if (currentPoint.tag == "Bunker")
+            {
+                Debug.Log("Attack " + currentPoint.GetComponent<BunkerMind>().hp);
+                currentPoint.GetComponent<BunkerMind>().Hit(Random.Range(attackLow, attackHigh));
+            }
+            if (currentPoint.name == "Player")
+            {
+                Debug.Log("Attack player" + currentPoint.GetComponent<PlayerControl>().curHealth);
+                currentPoint.GetComponent<PlayerControl>().Hit(Random.Range(attackLow, attackHigh));
+            }
 
+        }
+       
     }
 }
