@@ -87,6 +87,16 @@ public class PlayerControl : MonoBehaviour
             collision.gameObject.GetComponent<BunkerMind>().Hit(Random.Range(healLow, healHigh));
             gameObject.GetComponent<Animator>().SetBool("repair",true);
         }
+
+       
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        Debug.Log("Player collision " + other.collider.tag);
+         if(other.collider.tag == "Heal"){
+            curHealth += 10;
+            Destroy(other.gameObject);
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)

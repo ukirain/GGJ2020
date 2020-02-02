@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bunker
   - Enemy
+  - Heal
   layers:
   - Default
   - TransparentFX
