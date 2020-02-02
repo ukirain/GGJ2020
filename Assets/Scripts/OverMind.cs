@@ -7,7 +7,8 @@ public class OverMind : MonoBehaviour
     // public GameObject bunker;
     public Transform brick;
     public GameObject bunker;
-    public float radius = 5.0f;
+    public float radius_a = 8.0f;
+    public float radius_b = 6.0f;
     public float awaitingTime = 1f;
     public float timerSpawn = 1.5f;
     public float timerGrow = 2.8f;
@@ -51,8 +52,11 @@ public class OverMind : MonoBehaviour
 
     private void Spawn(){    
         Debug.Log("OverMind: Ticker spawn");  
-        float x =  Random.Range(-radius, radius);        
-        float y =  Mathf.Sign(Random.Range(-1.0f, 1.0f)) * Mathf.Sqrt(radius * radius - (x - transform.position.x) * (x - transform.position.x));
+        float x =  Random.Range(-radius_a, radius_a);
+        float rb_2 = radius_b * radius_b;
+        float ra_2 = radius_a * radius_a;
+        float rbra = rb_2 / ra_2;
+        float y =  Mathf.Sign(Random.Range(-1.0f, 1.0f)) * Mathf.Sqrt(rb_2 - rbra * (x - transform.position.x) * (x - transform.position.x));  
         if (x != 0.0f && y != 0 && countAliens < maxAliens)
         {
             Instantiate(brick, new Vector3(x, y, 0), Quaternion.identity);

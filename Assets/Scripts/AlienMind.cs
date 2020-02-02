@@ -58,7 +58,7 @@ public class AlienMind : MonoBehaviour
         if (gg)
         {
             Debug.Log("Game Over");
-            //SceneManager.LoadScene("GameOver");
+            SceneManager.LoadScene("GameOver");
         }
 
         SelectEnemy();
