@@ -13,6 +13,8 @@ public class PlayerControl : MonoBehaviour
     public int curHealth = 100;
     public int healLow = -4;
     public int healHigh = -6;
+    
+
 
     public float healthBarLength;
 
@@ -27,10 +29,14 @@ public class PlayerControl : MonoBehaviour
     {
         AddjustCurrentHealth(0);
 
+        if (DataManager.timer < 99999.0f) {
+            DataManager.timer += Time.deltaTime;
+        }
+
         if (curHealth < 1)
         {
             Debug.Log("Game Over");
-            //SceneManager.LoadScene("GameOver");
+            SceneManager.LoadScene("GameOver");
         }
 
         // нажали правую кнопку мыши
@@ -90,7 +96,8 @@ public class PlayerControl : MonoBehaviour
 
     void OnGUI()
     {
-        GUI.Box(new Rect(700, 10, healthBarLength, 20), curHealth + "/" + maxHealth);
+        GUI.Box(new Rect(400, 10, healthBarLength, 20), curHealth + "/" + maxHealth);        
+        GUI.Box(new Rect(400, 30, healthBarLength, 40), "Time:" + DataManager.timer.ToString("#.##"));
     }
 
     public void AddjustCurrentHealth(int adj)

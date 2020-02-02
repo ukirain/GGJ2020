@@ -65,7 +65,7 @@ public class AlienMind : MonoBehaviour
 
 
         if (!bunkerNear)
-        {
+        {            
             canAttack = false;
             Walking();
         }
@@ -99,6 +99,7 @@ public class AlienMind : MonoBehaviour
     {        
         float step =  speed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, currentPoint.transform.position, step); 
+        gameObject.GetComponent<Animator>().SetBool("attack",false);
     }
 
     void SelectEnemy()
@@ -151,11 +152,13 @@ public class AlienMind : MonoBehaviour
             {
                 Debug.Log("Attack " + currentPoint.GetComponent<BunkerMind>().hp);
                 currentPoint.GetComponent<BunkerMind>().Hit(Random.Range(attackLow, attackHigh));
+                gameObject.GetComponent<Animator>().SetBool("attack",true);
             }
             if (currentPoint.name == "Player")
             {
                 Debug.Log("Attack player" + currentPoint.GetComponent<PlayerControl>().curHealth);
                 currentPoint.GetComponent<PlayerControl>().Hit(Random.Range(attackLow, attackHigh));
+                gameObject.GetComponent<Animator>().SetBool("attack",true);
             }
 
         }
