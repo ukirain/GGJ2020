@@ -106,8 +106,8 @@ public class PlayerControl : MonoBehaviour
 
     void OnGUI()
     {
-        GUI.Box(new Rect(400, 10, healthBarLength, 20), curHealth + "/" + maxHealth);        
-        GUI.Box(new Rect(400, 30, healthBarLength, 40), "Time:" + DataManager.timer.ToString("#.##"));
+        GUI.Box(new Rect(400, 10, 450, 20), curHealth + "/" + maxHealth);        
+        GUI.Box(new Rect(400, 30, 450, 40), "Time:" + DataManager.timer.ToString("#.##"));
     }
 
     public void AddjustCurrentHealth(int adj)

@@ -17,6 +17,7 @@ public class ButtonControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DataManager.timer = 0.0f;
         buttonPlay.GetComponent<Button>().onClick.AddListener(Play);
         buttonAuthors.GetComponent<Button>().onClick.AddListener(Authors);
         buttonTutorial.GetComponent<Button>().onClick.AddListener(Tutorial);

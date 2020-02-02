@@ -33,7 +33,7 @@ public class HealControl : MonoBehaviour
 
     private void Spawn(){    
         Debug.Log("OverMind: Ticker spawn");  
-        float x =  Random.Range(-5, 5);        
+        float x =  Random.Range(-4.0f, 4.0f);        
         float y =  x;
         if (x != 0.0f && y != 0)
         {
