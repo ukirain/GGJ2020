@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AlienMind : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class AlienMind : MonoBehaviour
     public float senseRadius = 4.0f;
     private float scale = 5.0f;
     bool doTick = true;
+    bool gg = false;
     // Start is called before the first frame update
     IEnumerator Start()
     {        
@@ -45,8 +47,20 @@ public class AlienMind : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
-        
+        for (int i = 0; i < target.Length; i++)
+        {
+            if(target[i].GetComponent<BunkerMind>().hp < 0 && ((i > 0 && gg) || (i == 0)))
+            {
+                gg = true;
+            }
+        }
+
+        if (gg)
+        {
+            Debug.Log("Game Over");
+            //SceneManager.LoadScene("GameOver");
+        }
+
         SelectEnemy();
 
 
@@ -105,7 +119,7 @@ public class AlienMind : MonoBehaviour
         for(int i = 0; i < target.Length; i++)
         {
             delta = Vector3.Distance(target[i].transform.position, transform.position);
-            if (minDelta > delta)
+            if (minDelta > delta && target[i].GetComponent<BunkerMind>().hp > 0)
             {
                 Debug.Log("Alien want to choose Index: " + minIndex  + " Delta: " + delta);
                 minDelta = delta;

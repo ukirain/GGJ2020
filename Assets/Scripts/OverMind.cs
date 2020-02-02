@@ -9,18 +9,18 @@ public class OverMind : MonoBehaviour
     public GameObject bunker;
     public float radius = 5.0f;
     public float awaitingTime = 1f;
-    public float timerSpawn = 0.8f;
+    public float timerSpawn = 1.5f;
+    public float timerGrow = 2.8f;
     public int countAliens = 0;
     public int maxAliens = 50;
     bool doTick = true;
+    Coroutine coroutine;
 
     // Start is called before the first frame update
-    IEnumerator Start()
+    void Start()
     {
-       yield return new WaitForSeconds(awaitingTime);
-
-       // following code
-       StartCoroutine(Ticker(timerSpawn));    
+        // following code
+        StartCoroutine(Ticker2(timerGrow));    
     }
 
     // Update is called once per frame
@@ -33,9 +33,20 @@ public class OverMind : MonoBehaviour
     {
          while(doTick)
          {
+           Debug.Log("Corutine1: Ticker spawn " + period);
            Spawn();
            yield return new WaitForSeconds(period);
          }
+    }
+
+    IEnumerator Ticker2(float period)
+    {
+        while (doTick)
+        {
+            Debug.Log("Corutine2: Ticker grow");
+            Grow();
+            yield return new WaitForSeconds(period);
+        }
     }
 
     private void Spawn(){    
@@ -49,4 +60,12 @@ public class OverMind : MonoBehaviour
         }
     }
 
+    private void Grow()
+    {
+        if (timerSpawn > 0.1f)
+            timerSpawn -= 0.1f;
+        if(coroutine != null)
+            StopCoroutine(coroutine);
+        coroutine = StartCoroutine(Ticker(timerSpawn));
+    }
 }

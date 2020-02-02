@@ -31,12 +31,6 @@ public class BunkerMind : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (hp < 1)
-        {
-            Debug.Log("Game Over");
-            //SceneManager.LoadScene("GameOver");
-        }
         spawnPoints = GameObject.FindGameObjectsWithTag("Enemy");  
     }
 

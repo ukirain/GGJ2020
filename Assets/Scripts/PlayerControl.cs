@@ -30,7 +30,7 @@ public class PlayerControl : MonoBehaviour
         if (curHealth < 1)
         {
             Debug.Log("Game Over");
-            SceneManager.LoadScene("GameOver");
+            //SceneManager.LoadScene("GameOver");
         }
 
         // нажали правую кнопку мыши
@@ -75,11 +75,17 @@ public class PlayerControl : MonoBehaviour
     {
         //move = false;
         // нажали пробел, чиним бункер
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && collision.collider.tag == "Bunker")
         {
             Debug.Log("Attack " + collision.gameObject.GetComponent<BunkerMind>().hp);
             collision.gameObject.GetComponent<BunkerMind>().Hit(Random.Range(healLow, healHigh));
+            gameObject.GetComponent<Animator>().SetBool("repair",true);
         }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        gameObject.GetComponent<Animator>().SetBool("repair", false);
     }
 
     void OnGUI()
